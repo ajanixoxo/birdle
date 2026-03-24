@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import '../constant/constant.dart';
 class SplashScreen extends StatefulWidget {
@@ -20,8 +21,8 @@ class _SplashScreenState extends State<SplashScreen> {
   // This function waits 3 seconds then goes to welcome screen
   Future<void> _navigate() async {
     await Future.delayed(const Duration(seconds: 3));  // wait 3 seconds
-    // if (mounted) context.go('/welcome');               // then go to welcome
-    // "mounted" checks the screen is still open before navigating
+    if (mounted) context.go('/welcome');               // then go to welcome
+    //  "mounted" checks the screen is still open before navigating
   }
 
   @override
@@ -33,16 +34,15 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset('assets/images/logo.png', height: 80),  // your logo here
+            Image.asset('assets/images/logo.png', height: 100),  // your logo here
             Text(
-              'Birdle',                // your app name/logo here
-              style: TextStyle(
+              'Chophive', // your app name/logo here
+              style:GoogleFonts.poppins(
                 color: Colors.white,
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
           ),
           )
-          
           ],
         ),
       ),
