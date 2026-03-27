@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:go_router/go_router.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../constant/constant.dart';
 
@@ -118,7 +118,9 @@ class WelcomeScreen extends StatelessWidget {
                         child: Stack(
                         children: [
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              context.go('/auth'); 
+                            },
                             style: TextButton.styleFrom(
                               backgroundColor: AppColors.accent,
                               padding: const EdgeInsets.symmetric(
