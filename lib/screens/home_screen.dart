@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../constant/constant.dart';
+import '../component/product_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,6 +11,45 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 1;
+  final PageController _controller = PageController(viewportFraction: 0.85);
+
+  final List<Map<String, String>> banners = [
+    {
+      "title": "Special Offer",
+      "subtitle": "Get Special Discount",
+      "image": "assets/images/pizza.png",
+      "buttonText": "Order Now",
+    },
+    {
+      "title": "Up to 25%",
+      "subtitle": "Get Special Discount",
+      "image": "assets/images/plate_of_rice.png",
+      "buttonText": "Explore",
+    },
+    {
+      "title": "New Arrival",
+      "subtitle": "Get Special Discount",
+      "image": "assets/images/chicken.png",
+      "buttonText": "See Menu",
+    },
+  ];
+
+  final List<Map<String, String>> products = [
+    {
+      "name": "Jollof Rice",
+      "category": "Local Food",
+     "price": "₦1,800",
+    "image": "assets/images/plate_of_rice.png",
+    }
+  ];
+
+  @override
+  void dispose() {
+    _controller.dispose(); // 👈 always dispose controller
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,119 +173,76 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                     
-                      Column(
-                        spacing: 3,
-                        children: [
-                          Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: AppColors.accent,
-                              borderRadius: BorderRadius.circular(12),
-
-                              ),
-                            child: Transform.scale(
-                              scale: 1.5,  
-                              child: Image.asset("assets/images/pizza.png"),
-                              )
-                            ,
-                          ),
-                          Text(
-                            "Pizza",
-                            style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                      _buildCategory("Pizza", "assets/images/pizza.png", 1.5),
+                      _buildCategory(
+                        "Rice",
+                        "assets/images/plate_of_rice.png",
+                        0.8,
                       ),
-                        Column(
-                        spacing: 3,
-                        children: [
-                          Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: AppColors.accent,
-                              borderRadius: BorderRadius.circular(12),
-
-                              ),
-                            child: Transform.scale(
-                              scale: 1.5,  
-                              child: Image.asset("assets/images/plate_of_rice.png"),
-                              )
-                            ,
-                          ),
-                          Text(
-                            "Pizza",
-                            style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                        Column(
-                        spacing: 3,
-                        children: [
-                          Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: AppColors.accent,
-                              borderRadius: BorderRadius.circular(12),
-
-                              ),
-                            child: Transform.scale(
-                              scale: 1.5,  
-                              child: Image.asset("assets/images/snacks.png"),
-                              )
-                            ,
-                          ),
-                          Text(
-                            "Pizza",
-                            style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                        Column(
-                        spacing: 3,
-                        children: [
-                          Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: AppColors.accent,
-                              borderRadius: BorderRadius.circular(12),
-
-                              ),
-                            child: Transform.scale(
-                              scale: 1.5,  
-                              child: Image.asset("assets/images/pizza.png"),
-                              )
-                            ,
-                          ),
-                          Text(
-                            "Pizza",
-                            style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                      _buildCategory("Snacks", "assets/images/snacks.png", 1.5),
+                      _buildCategory(
+                        "Chicken",
+                        "assets/images/chicken.png",
+                        1.5,
                       ),
                     ],
                   ),
                 ],
+              ),
+
+              // Add Carousel
+              Column(
+                children: [
+                  SizedBox(
+                    height: 180,
+                    child: PageView.builder(
+                      controller: _controller,
+                      itemCount: banners.length,
+                      onPageChanged: (index) {
+                        setState(() => _currentIndex = index);
+                      },
+                      itemBuilder: (context, index) {
+                        final item = banners[index];
+                        return _buildBannerCard(item);
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // dots indicator
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(banners.length, (index) {
+                      return AnimatedContainer(
+                        duration: Duration(milliseconds: 300),
+                        margin: EdgeInsets.symmetric(horizontal: 4),
+                        width: _currentIndex == index ? 20 : 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: _currentIndex == index
+                              ? AppColors.primary
+                              : Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      );
+                    }),
+                  ),
+                ],
+              ),
+
+              GridView.count(
+                crossAxisCount: 2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                children: products.map((product) {
+                  return ProductCard(
+                    product: product,
+                  ); // 👈 use it like any widget
+                }).toList(),
               ),
             ],
           ),
@@ -253,4 +250,102 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+Widget _buildCategory(String label, String imagePath, double scale) {
+  return Column(
+    spacing: 3,
+    children: [
+      Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+          color: AppColors.accent,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Transform.scale(scale: scale, child: Image.asset(imagePath)),
+      ),
+      Text(
+        label,
+        style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+    ],
+  );
+}
+
+Widget _buildBannerCard(Map<String, String> item) {
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 8),
+    child: Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          stops: [0.16, 1.0], // 👈 matches your 16% and 100% stops
+          colors: [
+            Color(0xFF910407).withOpacity(1.0), // 16% stop — 100% opacity
+            Color(0xFFF31B20).withOpacity(0.51), // 100% stop — 51% opacity
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          // left — text + button
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 8,
+              children: [
+                Text(
+                  item["subtitle"]!,
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  item["title"]!,
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: AppColors.primary,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: Text(
+                    item["buttonText"]!,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // right — image
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset(
+              item["image"]!,
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
