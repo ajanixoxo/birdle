@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../constant/constant.dart';
@@ -182,8 +182,9 @@ class AuthScreen extends StatelessWidget {
                                       ),
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        // Handle login logic here
+                                      onPressed: () async{
+                                        // Handle login logic here 
+                                        context.go('/home');
                                       },
                                       style: TextButton.styleFrom(
                                         backgroundColor: AppColors.primary,
@@ -298,6 +299,7 @@ class AuthScreen extends StatelessWidget {
                                     TextButton(
                                       onPressed: () {
                                         // Handle login logic here
+                                        context.go('/home');
                                       },
                                       style: TextButton.styleFrom(
                                         backgroundColor: AppColors.primary,
